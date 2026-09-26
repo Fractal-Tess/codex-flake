@@ -71,9 +71,9 @@ The daily [update workflow](.github/workflows/update.yml) runs at 12:00 UTC, res
 
 Pass a stable version such as `./scripts/update.sh 0.157.1` to update to a specific release. The workflow can also be started manually from GitHub Actions.
 
-## Credits
+## Credits and mirrors
 
-[GitHub](https://github.com/Fractal-Tess/codex-flake)
+[GitHub](https://github.com/Fractal-Tess/codex-flake) · Gitadel: `ssh://git@neo.netbird.cloud:2222/fractal-tess/codex-flake.git`
 
 The flake packaging is [MIT](LICENSE). Codex is [Apache-2.0 licensed](https://github.com/openai/codex/blob/main/LICENSE), © OpenAI.
 
