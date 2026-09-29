@@ -8,17 +8,17 @@
 }:
 
 let
-  version = "0.157.1";
+  version = "0.159.1";
   sources = {
     x86_64-linux = {
       target = "x86_64-unknown-linux-musl";
-      hash = "sha256-6YwejgKOgTf6LSQVyC7Fjns3AaYn41VKrOWzyjFFSvI=";
-      codeModeHostHash = "sha256-NRb5uLvmvAbue9uSspOhfqsZSz8QubnqEMW4Oely1/w=";
+      hash = "sha256-R6+LtBsA6vOoCcJ9X4NXdAkQNzpqXe21T57nSM7daFE=";
+      codeModeHostHash = "sha256-O4ZEvbOdvu0atVKTZy3Q/OHzuPvdkXUwjXRotK8NVLw=";
     };
     aarch64-linux = {
       target = "aarch64-unknown-linux-musl";
-      hash = "sha256-TGscF8HF/Q1PspUbdIGGe5Xqcysf6rJpyYWIsV2xYlM=";
-      codeModeHostHash = "sha256-6DdCgG2pjpp3rSQwnr0WKegid1WjQa0LQo+IXJe7MY4=";
+      hash = "sha256-hOe+fFjvm24WCdnF8UqOklBvvydtw1x2qPEh6DYgr5U=";
+      codeModeHostHash = "sha256-qpa37Nxp5oiemnRWX1NEtoeDyD2k/MPcnaqsKP2Omwg=";
     };
   };
   source = sources.${stdenv.hostPlatform.system};
