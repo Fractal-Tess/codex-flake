@@ -110,7 +110,7 @@ main() {
     -e "s|./scripts/update.sh ${current_version}|./scripts/update.sh ${version}|g" \
     README.md
 
-  nix fmt
+  git ls-files -z '*.nix' | xargs -0 nix fmt --
   nix flake check --print-build-logs
   nix build .#codex --print-build-logs
   test -x result/bin/codex || fail "built package does not contain an executable bin/codex"
