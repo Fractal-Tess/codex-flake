@@ -60,7 +60,7 @@ latest_stable_release() {
 
 main() {
   local requested_version="${1:-}"
-  local current_version release_json version x86_hash arm64_hash x86_host_hash arm64_host_hash
+  local current_version release_json version x86_hash arm64_hash
 
   require_tool curl
   require_tool jq
@@ -90,17 +90,13 @@ main() {
     exit 0
   fi
 
-  x86_hash="$(to_sri "$(asset_digest "$release_json" "codex-x86_64-unknown-linux-musl.tar.gz")")"
-  arm64_hash="$(to_sri "$(asset_digest "$release_json" "codex-aarch64-unknown-linux-musl.tar.gz")")"
-  x86_host_hash="$(to_sri "$(asset_digest "$release_json" "codex-code-mode-host-x86_64-unknown-linux-musl.tar.gz")")"
-  arm64_host_hash="$(to_sri "$(asset_digest "$release_json" "codex-code-mode-host-aarch64-unknown-linux-musl.tar.gz")")"
+  x86_hash="$(to_sri "$(asset_digest "$release_json" "codex-package-x86_64-unknown-linux-musl.tar.gz")")"
+  arm64_hash="$(to_sri "$(asset_digest "$release_json" "codex-package-aarch64-unknown-linux-musl.tar.gz")")"
 
   sed -i \
     -e "s|^  version = \"${current_version}\";|  version = \"${version}\";|" \
     -e "/x86_64-linux = {/,/};/ s|^      hash = .*|      hash = \"${x86_hash}\";|" \
-    -e "/x86_64-linux = {/,/};/ s|^      codeModeHostHash = .*|      codeModeHostHash = \"${x86_host_hash}\";|" \
     -e "/aarch64-linux = {/,/};/ s|^      hash = .*|      hash = \"${arm64_hash}\";|" \
-    -e "/aarch64-linux = {/,/};/ s|^      codeModeHostHash = .*|      codeModeHostHash = \"${arm64_host_hash}\";|" \
     packages/codex.nix
 
   sed -i \
@@ -114,8 +110,7 @@ main() {
   nix flake check --print-build-logs
   nix build .#codex --print-build-logs
   test -x result/bin/codex || fail "built package does not contain an executable bin/codex"
-  test -x result/bin/codex-code-mode-host \
-    || fail "built package does not contain an executable bin/codex-code-mode-host"
+  test -f result/codex-package.json || fail "built package does not contain codex-package.json"
 
   printf 'Updated Codex from %s to %s.\n' "$current_version" "$version"
 }

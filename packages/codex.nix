@@ -2,9 +2,6 @@
   lib,
   stdenv,
   fetchurl,
-  makeWrapper,
-  ripgrep,
-  bubblewrap,
 }:
 
 let
@@ -12,59 +9,42 @@ let
   sources = {
     x86_64-linux = {
       target = "x86_64-unknown-linux-musl";
-      hash = "sha256-R6+LtBsA6vOoCcJ9X4NXdAkQNzpqXe21T57nSM7daFE=";
-      codeModeHostHash = "sha256-O4ZEvbOdvu0atVKTZy3Q/OHzuPvdkXUwjXRotK8NVLw=";
+      hash = "sha256-mi3/jh65utg/Uu22+RF17+tcaKMW+IDJXXdw+Ho0/Fw=";
     };
     aarch64-linux = {
       target = "aarch64-unknown-linux-musl";
-      hash = "sha256-hOe+fFjvm24WCdnF8UqOklBvvydtw1x2qPEh6DYgr5U=";
-      codeModeHostHash = "sha256-qpa37Nxp5oiemnRWX1NEtoeDyD2k/MPcnaqsKP2Omwg=";
+      hash = "sha256-Y7O1pOdrQXTWUdLTY6wCj9tJYbpH7KmUbaPDUmeZmuw=";
     };
   };
   source = sources.${stdenv.hostPlatform.system};
-  releaseAsset =
-    name: hash:
-    fetchurl {
-      url = "https://github.com/openai/codex/releases/download/rust-v${version}/${name}-${source.target}.tar.gz";
-      inherit hash;
-    };
 in
 stdenv.mkDerivation {
   pname = "codex";
   inherit version;
 
-  srcs = [
-    (releaseAsset "codex" source.hash)
-    # Code mode, which image generation runs through, spawns this helper from
-    # the directory holding the codex executable and fails closed without it.
-    (releaseAsset "codex-code-mode-host" source.codeModeHostHash)
-  ];
+  src = fetchurl {
+    url = "https://github.com/openai/codex/releases/download/rust-v${version}/codex-package-${source.target}.tar.gz";
+    inherit (source) hash;
+  };
 
-  nativeBuildInputs = [ makeWrapper ];
-
-  # Each tarball holds a single binary named after the target triple, and the
-  # binaries are statically linked against musl, so there is nothing to patch;
-  # installing and wrapping them is enough.
+  # The package bundle is the layout the standalone installer ships: the codex
+  # executable and its code-mode host under bin/, bundled ripgrep and
+  # bubblewrap under codex-path/ and codex-resources/, and a codex-package.json
+  # manifest at the root. Codex resolves its helpers relative to that manifest,
+  # and the app-server daemon behind the interactive CLI refuses to start
+  # without it, so the bundle is installed verbatim as the output.
   sourceRoot = ".";
 
   installPhase = ''
     runHook preInstall
-    install -Dm755 "codex-${source.target}" "$out/bin/codex"
-    install -Dm755 "codex-code-mode-host-${source.target}" "$out/bin/codex-code-mode-host"
+    mkdir -p "$out"
+    cp -r bin codex-package.json codex-path codex-resources "$out/"
     runHook postInstall
   '';
 
-  # Codex shells out to ripgrep for search and to bubblewrap for its Linux
-  # sandbox, so both are supplied declaratively rather than left to the host.
-  postFixup = ''
-    wrapProgram "$out/bin/codex" \
-      --prefix PATH : ${
-        lib.makeBinPath [
-          ripgrep
-          bubblewrap
-        ]
-      }
-  '';
+  # The executables are statically linked against musl and the voice host
+  # carries its own libraries, so the bundle is kept byte-for-byte as shipped.
+  dontFixup = true;
 
   meta = {
     description = "OpenAI's coding agent that runs locally in your terminal";

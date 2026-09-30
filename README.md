@@ -12,7 +12,7 @@
 
 [Codex](https://github.com/openai/codex) is OpenAI's coding agent that runs locally in your terminal.
 
-This flake packages the official prebuilt static musl binary from the upstream release. There is no Rust toolchain build and no npm wrapper, so nothing is compiled at install time. `ripgrep`, which Codex uses for search, and `bubblewrap`, which backs its Linux sandbox, are supplied declaratively rather than left to the host. It supports x86_64 and ARM64 Linux.
+This flake packages the official prebuilt Codex package bundle from the upstream release: the static musl `codex` binary together with the helpers it expects beside it, including the code-mode host, `ripgrep`, and `bubblewrap`. There is no Rust toolchain build and no npm wrapper, so nothing is compiled at install time. It supports x86_64 and ARM64 Linux.
 
 ```sh
 nix run github:Fractal-Tess/codex-flake -- --version
