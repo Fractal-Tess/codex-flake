@@ -5,15 +5,15 @@
 }:
 
 let
-  version = "0.162.0";
+  version = "0.162.1";
   sources = {
     x86_64-linux = {
       target = "x86_64-unknown-linux-musl";
-      hash = "sha256-T1c5RMHSBZEJ11ovTQzJwDaXKIIkpeQHcXqd6Y/AEMU=";
+      hash = "sha256-pnb1ciquDYbL43ZDMvCOqx/didwKMAs61P+/SGEfo+M=";
     };
     aarch64-linux = {
       target = "aarch64-unknown-linux-musl";
-      hash = "sha256-1Hpfoh4DehuFcpuIwjj/PaipVvyfta05dnFEKOf7K9o=";
+      hash = "sha256-U6nOC5S+snpj/esvdwTZUZnheziYqjO2BGGhqTrA2Is=";
     };
   };
   source = sources.${stdenv.hostPlatform.system};

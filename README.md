@@ -7,7 +7,7 @@
 <p align="center">
   <a href="flake.nix"><img src="https://img.shields.io/badge/Nix-flake-5277C3?logo=nixos&logoColor=white" alt="Nix flake" /></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue" alt="MIT license" /></a>
-  <a href="https://github.com/openai/codex/releases/tag/rust-v0.162.0"><img src="https://img.shields.io/badge/codex-0.162.0-black" alt="Codex 0.162.0" /></a>
+  <a href="https://github.com/openai/codex/releases/tag/rust-v0.162.1"><img src="https://img.shields.io/badge/codex-0.162.1-black" alt="Codex 0.162.1" /></a>
 </p>
 
 [Codex](https://github.com/openai/codex) is OpenAI's coding agent that runs locally in your terminal.
@@ -69,7 +69,7 @@ The daily [update workflow](.github/workflows/update.yml) runs at 12:00 UTC, res
 ./scripts/update.sh
 ```
 
-Pass a stable version such as `./scripts/update.sh 0.162.0` to update to a specific release. The workflow can also be started manually from GitHub Actions.
+Pass a stable version such as `./scripts/update.sh 0.162.1` to update to a specific release. The workflow can also be started manually from GitHub Actions.
 
 ## Credits and mirrors
 
